@@ -1,0 +1,74 @@
+// The photos behind "Knowbooks Photos".
+// This compiles to photosData.js (and .json), which readme.scroll iterates over.
+// To add a photo: drop the image in this folder, then add an entry at the top (newest first).
+// `web` is optional: a smaller copy in web/ for photos over ~2MB. The card shows `web`, and "Open full size" opens `image`.
+buildConcepts photosData.js photosData.json
+
+id leather-october-10
+title Leather
+date 2026-10-10
+image leather-october-10.jpeg
+web web/leather-october-10.jpeg
+caption Piles of leather scraps sorted by color across the floor.
+
+id cherry-october-3
+title Cherry
+date 2026-10-03
+image cherry-october-3.jpeg
+caption A cherry wood book cover next to an open, illustrated hardcover.
+
+id sept-27-walnut
+title Walnut
+date 2026-09-27
+image sept-27-walnut.jpeg
+web web/sept-27-walnut.jpeg
+caption A walnut book form on the workbench, up close.
+
+id sept-27-logo-concept
+title Logo Concept
+date 2026-09-27
+image sept-27-logo-concept.jpeg
+web web/sept-27-logo-concept.jpeg
+caption Wood strips fanned out into a sunburst, an idea for the logo.
+
+id sept-20-wood
+title Wood
+date 2026-09-20
+image sept-20-wood.jpeg
+caption Walnut and oak book forms stacked in the shop.
+
+id sept-4-things-of-science
+title Things of Science
+date 2026-09-04
+image sept-4-things-of-science.jpeg
+caption A table covered in vintage Things of Science kits, opened up.
+
+id sept-3-prototypes
+title Prototypes
+date 2026-09-03
+image sept-3-prototypes.jpeg
+caption Cloth-bound Sales and Magnetism Knowbooks.
+
+id aug-28-prototypes
+title Prototypes
+date 2026-08-28
+image aug-28-prototypes.jpeg
+caption An open Knowbook with a hammer, tape measure, screwdrivers, and clamp inside.
+
+idParser
+ extends abstractIdParser
+
+titleParser
+ extends abstractStringMeasureParser
+
+dateParser
+ extends abstractStringMeasureParser
+
+imageParser
+ extends abstractStringMeasureParser
+
+webParser
+ extends abstractStringMeasureParser
+
+captionParser
+ extends abstractStringMeasureParser

@@ -1,0 +1,615 @@
+title Knowbooks Photos
+description Photos from the making of Knowbooks: prototypes, wood, leather, and inspiration, newest first.
+baseUrl https://photos.knowbooks.com/
+permalink index.html
+openGraphImage cherry-october-3.jpeg
+favicon knowbooksLogo.svg
+buildHtml
+metaTags
+
+html
+ <div class="appShell">
+  <aside class="sidebar" aria-label="Knowbooks photos">
+   <div class="sidebarLabel">Photos</div>
+   <div class="sidebarFilter">
+    <input type="search" id="filterInput" placeholder="Filter photos…" autocomplete="off" spellcheck="false" aria-label="Filter photos" aria-controls="makerList">
+    <button type="button" id="filterClear" class="filterClear" aria-label="Clear filter" hidden>×</button>
+   </div>
+   <nav class="makerList" id="makerList"></nav>
+  </aside>
+  <main class="mainPane">
+   <header class="masthead">
+    <div>
+     <h1>Knowbooks<br><span>Photos</span></h1>
+     <p>Photos from the making of Knowbooks: prototypes, wood, leather, and inspiration, newest first.</p>
+     <p class="credit">Made by <a href="https://twitter.com/breckyunits" target="_blank" rel="noopener noreferrer">Breck Yunits</a> · Get yours at <a href="https://knowbooks.com">knowbooks.com</a></p>
+    </div>
+    <a class="repoLink" href="https://knowbooks.com" aria-label="Knowbooks.com" title="Knowbooks.com"><img src="knowbooksLogo.svg" alt=""></a>
+   </header>
+   <section class="stage" id="stage" aria-roledescription="carousel" aria-label="Knowbooks photos" tabindex="0">
+    <div class="atmosphere" aria-hidden="true"></div>
+    <div class="carousel" id="carousel"></div>
+    <button class="previewCenterTarget previewPrevious" id="previousPreview" type="button" aria-label="Center previous photo"></button>
+    <button class="previewCenterTarget previewNext" id="nextPreview" type="button" aria-label="Center next photo"></button>
+    <button class="navButton previous" id="previous" type="button" aria-label="Previous photo" title="Previous photo (Left arrow)"><span>‹</span></button>
+    <button class="navButton next" id="next" type="button" aria-label="Next photo" title="Next photo (Right arrow)"><span>›</span></button>
+    <div class="position" aria-hidden="true"><span id="positionCurrent">01</span><i></i><span id="positionTotal"></span></div>
+   </section>
+  </main>
+ </div>
+ <div class="srOnly" id="liveRegion" aria-live="polite"></div>
+
+css
+ :root {
+  color-scheme: dark;
+  --ink: #f4efe5;
+  --muted: #a3a58f;
+  --gold: #d9bc78;
+  --orange: #ff7657;
+  --panel: rgba(24, 34, 27, .82);
+  --line: rgba(205, 244, 234, .13);
+  --sidebar: 244px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+ }
+ * { box-sizing: border-box; }
+ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #121a15; }
+ body {
+  color: var(--ink);
+  background:
+   radial-gradient(circle at 72% 28%, rgba(92, 124, 96, .28), transparent 34%),
+   radial-gradient(circle at 42% 105%, rgba(217, 188, 120, .09), transparent 35%),
+   #121a15;
+ }
+ button, a { font: inherit; }
+ .appShell { display: grid; grid-template-columns: var(--sidebar) minmax(0, 1fr); width: 100%; height: 100%; }
+ .sidebar {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 18px 0;
+  overflow: hidden;
+  border-right: 1px solid rgba(255,255,255,.13);
+  background:
+   linear-gradient(135deg, rgba(255,255,255,.055), transparent 36%),
+   rgba(20, 30, 23, .76);
+  box-shadow: 18px 0 60px rgba(0,0,0,.24);
+  backdrop-filter: blur(28px) saturate(135%);
+ }
+ .sidebarLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 18px 12px;
+  color: #bdbba6;
+  font-size: 10px;
+  font-weight: 720;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+ }
+ .sidebarFilter {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px 10px;
+ }
+ .sidebarFilter input {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(236,228,205,.16);
+  border-radius: 8px;
+  color: var(--ink);
+  background: rgba(255,255,255,.045);
+  font-size: 11px;
+  letter-spacing: .01em;
+  outline: none;
+  transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
+ }
+ .sidebarFilter input::placeholder { color: #6e7262; }
+ .sidebarFilter input:focus { border-color: var(--gold); background: rgba(217,188,120,.08); box-shadow: 0 0 0 2px rgba(217,188,120,.16); }
+ .sidebarFilter input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
+ .filterClear {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid rgba(236,228,205,.16);
+  border-radius: 7px;
+  color: #b1af99;
+  background: rgba(255,255,255,.045);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color .18s ease, background .18s ease, border-color .18s ease;
+ }
+ .filterClear:hover { color: #1a2219; border-color: var(--gold); background: var(--gold); }
+ .filterClear[hidden] { display: none; }
+ .tocEmpty { margin: 0; padding: 12px 18px; color: #6e7262; font-size: 11px; line-height: 1.4; }
+ .makerList {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 2px 10px 60px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.16) transparent;
+  mask-image: linear-gradient(to bottom, transparent 0, black 13px, black calc(100% - 24px), transparent 100%);
+ }
+ .makerList a {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  width: 100%;
+  min-height: 45px;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 8px;
+  color: #8f9280;
+  background: transparent;
+  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
+  transition: color .16s ease, background .16s ease, transform .16s ease;
+ }
+ .makerList a:hover { color: #ebe6d6; background: rgba(255,255,255,.055); transform: translateX(2px); }
+ .makerList a[aria-current="true"] {
+  color: #faf6ec;
+  background: linear-gradient(90deg, rgba(217,188,120,.18), rgba(217,188,120,.065));
+  box-shadow: inset 2px 0 var(--gold);
+ }
+ .tocCopy { display: grid; min-width: 0; gap: 3px; }
+ .tocRank { align-self: start; margin-top: 2px; color: #5f6354; font: 600 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
+ .makerList a[aria-current="true"] .tocRank { color: var(--gold); }
+ .tocName { overflow: hidden; font-size: 12px; font-weight: 560; letter-spacing: -.01em; text-overflow: ellipsis; white-space: nowrap; }
+ .tocLanguage { overflow: hidden; color: #646857; font-size: 9px; font-weight: 600; letter-spacing: .02em; text-overflow: ellipsis; white-space: nowrap; }
+ .makerList a[aria-current="true"] .tocLanguage { color: #c7ad70; }
+ .mainPane { min-width: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); }
+ .masthead {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: clamp(24px, 4.1vh, 50px) clamp(28px, 4.5vw, 72px) 4px;
+ }
+ h1 { margin: 0; font-size: clamp(30px, 4.3vw, 68px); font-weight: 730; line-height: .86; letter-spacing: -.065em; }
+ h1 span { color: transparent; -webkit-text-stroke: 1px rgba(244,239,229,.56); }
+ .masthead p { max-width: 530px; margin: 16px 0 0; color: var(--muted); font-size: clamp(11px, 1.15vw, 15px); line-height: 1.45; letter-spacing: .01em; }
+ .masthead .credit { margin-top: 7px; color: #6e7262; font-size: clamp(9px, .85vw, 11px); }
+ .credit a { color: #b1af99; text-decoration: none; border-bottom: 1px solid rgba(217,188,120,.32); transition: color .18s ease, border-color .18s ease; }
+ .credit a:hover { color: var(--gold); border-color: var(--gold); }
+ .repoLink {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  color: var(--ink);
+  background: rgba(255,255,255,.035);
+  transition: transform .2s ease, color .2s ease, border-color .2s ease, background .2s ease;
+ }
+ .repoLink:hover { color: #1a2219; border-color: var(--gold); background: rgba(217,188,120,.16); transform: translateY(-2px) rotate(-4deg); }
+ .repoLink img { width: 26px; height: 26px; }
+ .stage {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  perspective: 1500px;
+  perspective-origin: 50% 43%;
+  outline: none;
+  touch-action: pan-y;
+ }
+ .stage:focus-visible { box-shadow: inset 0 0 0 1px rgba(217,188,120,.5); }
+ .atmosphere {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+ }
+ .atmosphere::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -36%;
+  width: 125%;
+  height: 82%;
+  transform: translateX(-50%) perspective(700px) rotateX(67deg);
+  transform-origin: center bottom;
+  opacity: .23;
+  background-image:
+   linear-gradient(rgba(214,204,170,.15) 1px, transparent 1px),
+   linear-gradient(90deg, rgba(214,204,170,.15) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to top, black, transparent 76%);
+ }
+ .atmosphere::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  width: min(76vw, 980px);
+  height: 220px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: rgba(150, 180, 135, .13);
+  filter: blur(80px);
+ }
+ .carousel { position: absolute; inset: 0; transform-style: preserve-3d; }
+ .card {
+  --x: 0px;
+  --z: 0px;
+  --rot: 0deg;
+  --scale: 1;
+  --hover: 1;
+  position: absolute;
+  left: 50%;
+  top: 43%;
+  width: clamp(360px, 58vw, 900px);
+  height: clamp(330px, 59vh, 650px);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: clamp(13px, 1.6vw, 21px);
+  background: #e3ddcc;
+  box-shadow: 0 45px 100px rgba(0,0,0,.54), 0 12px 28px rgba(0,0,0,.34), inset 0 1px rgba(255,255,255,.55);
+  transform: translate(-50%, -50%) translate3d(var(--x), 0, var(--z)) rotateY(var(--rot)) scale(calc(var(--scale) * var(--hover)));
+  transform-style: preserve-3d;
+  transition: transform .42s cubic-bezier(.2,.78,.18,1), opacity .3s ease, filter .24s ease, box-shadow .24s ease;
+  will-change: transform;
+ }
+ .card:not(.active):hover, .card.sideHovered { --hover: 1.13; filter: saturate(1.12) brightness(1.06); box-shadow: 0 55px 115px rgba(0,0,0,.64), 0 0 0 1px rgba(217,188,120,.42); }
+ .card.active { border-color: rgba(255,255,255,.34); }
+ .browserBar {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 14px;
+  color: #e8e2d1;
+  background: linear-gradient(#2f3d30, #1f2a22);
+  border-bottom: 1px solid rgba(0,0,0,.38);
+ }
+ .makerName { flex: 0 1 auto; min-width: 0; max-width: 52%; overflow: hidden; color: inherit; font-size: 12px; font-weight: 650; letter-spacing: -.01em; text-decoration: none; text-overflow: ellipsis; white-space: nowrap; }
+ .makerName:hover { text-decoration: underline; text-underline-offset: 3px; }
+ .barLanguages { display: flex; flex: 1; min-width: 0; gap: 4px; overflow: hidden; justify-content: flex-end; }
+ .viewport { position: absolute; inset: 42px 0 0; overflow: hidden; background: #141a15; }
+ .cardBlur { position: absolute; inset: -30px; background: center / cover no-repeat; filter: blur(26px) brightness(.55) saturate(1.1); }
+ .cardImg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
+ .cardImgLink { position: absolute; inset: 0; display: block; }
+ .card:not(.active) .cardImgLink { pointer-events: none; }
+ .card.active .viewport { cursor: zoom-in; }
+ .card.active .viewport::after { content: "Open full size ⤢"; position: absolute; right: 12px; bottom: 12px; z-index: 3; padding: 6px 10px; border-radius: 999px; background: rgba(18,26,20,.72); color: #f1ecdf; font-size: 10px; font-weight: 650; letter-spacing: .04em; text-transform: uppercase; pointer-events: none; border: 1px solid rgba(255,255,255,.16); }
+ .cardTint { position: absolute; inset: 0; z-index: 2; pointer-events: none; box-shadow: inset 0 0 70px rgba(10,16,12,.09); }
+ .language {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 100%;
+  padding: 4px 7px;
+  overflow: hidden;
+  border: 1px solid rgba(236,228,205,.16);
+  border-radius: 999px;
+  color: #ece6d5;
+  background: rgba(255,255,255,.06);
+  font-size: 8px;
+  font-weight: 620;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+ }
+ .language:first-child { color: #2a2410; border-color: var(--gold); background: var(--gold); }
+ .previewCenterTarget { position: absolute; z-index: 11; top: 43%; width: max(0px, calc((100% - clamp(360px, 58vw, 900px)) / 2)); height: clamp(330px, 59vh, 650px); padding: 0; border: 0; background: transparent; cursor: pointer; transform: translateY(-50%); }
+ .previewCenterTarget:focus-visible { outline: 2px solid var(--gold); outline-offset: -3px; }
+ .previewCenterTarget:disabled { pointer-events: none; }
+ .previewPrevious { left: 0; }
+ .previewNext { right: 0; }
+ .navButton {
+  position: absolute;
+  z-index: 12;
+  top: 43%;
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,.17);
+  border-radius: 50%;
+  color: #ece6d5;
+  background: rgba(18,26,20,.72);
+  box-shadow: 0 10px 28px rgba(0,0,0,.24);
+  cursor: pointer;
+  transform: translateY(-50%);
+  backdrop-filter: blur(12px);
+  transition: color .18s ease, background .18s ease, border-color .18s ease, transform .18s ease, opacity .18s ease;
+ }
+ .navButton span { margin-top: -4px; font-size: 38px; font-weight: 220; line-height: 1; }
+ .navButton:hover { color: #1a2219; border-color: var(--gold); background: var(--gold); transform: translateY(-50%) scale(1.08); }
+ .navButton:disabled { opacity: .18; cursor: default; pointer-events: none; }
+ .previous { left: clamp(15px, 2.5vw, 40px); }
+ .next { right: clamp(15px, 2.5vw, 40px); }
+ .position {
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  bottom: clamp(15px, 2.8vh, 30px);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #6f7363;
+  font: 650 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  transform: translateX(-50%);
+ }
+ .position i { display: block; width: 48px; height: 1px; background: linear-gradient(90deg, var(--gold), rgba(217,188,120,.15)); }
+ .position span:first-child { color: #e6e0cf; }
+ .srOnly { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+ @media (max-width: 900px) {
+  :root { --sidebar: 202px; }
+  .masthead { padding-left: 28px; padding-right: 28px; }
+  .card { width: clamp(330px, 66vw, 720px); }
+  .previewCenterTarget { width: max(0px, calc((100% - clamp(330px, 66vw, 720px)) / 2)); }
+  .tocName { font-size: 11px; }
+ }
+ @media (max-width: 680px) {
+  html, body { overflow-x: hidden; overflow-y: auto; }
+  .appShell { grid-template-columns: 1fr; grid-template-rows: 140px minmax(650px, calc(100vh - 140px)); min-height: 790px; }
+  .sidebar { display: grid; grid-template-rows: 24px auto 1fr; padding: 10px 0 7px; border-right: 0; border-bottom: 1px solid rgba(255,255,255,.13); }
+  .sidebarLabel { grid-row: 1; padding: 1px 14px 0; }
+  .sidebarFilter { grid-row: 2; padding: 0 10px 8px; }
+  .makerList { grid-row: 3; grid-column: 1 / -1; display: flex; gap: 4px; width: 100%; height: 55px; padding: 6px 10px 9px; overflow-x: auto; overflow-y: hidden; mask-image: linear-gradient(90deg, transparent, black 12px, black calc(100% - 12px), transparent); }
+  .makerList a { flex: 0 0 auto; display: block; width: auto; min-height: 34px; padding: 6px 11px; white-space: nowrap; }
+  .makerList a[aria-current="true"] { box-shadow: inset 0 -2px var(--gold); }
+  .tocRank { display: none; }
+  .tocName { font-size: 10px; }
+  .mainPane { min-height: 650px; }
+  .masthead { padding: 25px 20px 0; }
+  h1 { font-size: clamp(31px, 10.5vw, 48px); }
+  .masthead p { max-width: 310px; margin-top: 11px; font-size: 10px; }
+  .masthead .credit { margin-top: 5px; font-size: 8px; }
+  .repoLink { width: 38px; height: 38px; }
+  .card { top: 42%; width: min(86vw, 540px); height: min(53vh, 500px); }
+  .previewCenterTarget { top: 42%; width: max(0px, calc((100% - min(86vw, 540px)) / 2)); height: min(53vh, 500px); }
+  .navButton { top: 42%; width: 42px; height: 42px; }
+  .previous { left: 8px; }
+  .next { right: 8px; }
+ }
+ @media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .001ms !important; animation-duration: .001ms !important; }
+ }
+ .caption { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; margin: 0; padding: 38px 160px 14px 16px; color: #f4efe5; background: linear-gradient(transparent, rgba(10,16,12,.82)); font-size: 13px; line-height: 1.4; pointer-events: none; }
+ .card:not(.active) .caption { opacity: 0; }
+ @media (max-width: 680px) { .caption { padding: 30px 12px 40px; font-size: 11px; } }
+
+photosData.js
+
+script
+ (() => {
+  "use strict"
+  const items = photosData.map(photo => ({...photo, slug: photo.id, caption: photo.caption || ""}))
+  const list = document.getElementById("makerList")
+  const carousel = document.getElementById("carousel")
+  const filterInput = document.getElementById("filterInput")
+  const filterClear = document.getElementById("filterClear")
+  const previous = document.getElementById("previous")
+  const next = document.getElementById("next")
+  const previousPreview = document.getElementById("previousPreview")
+  const nextPreview = document.getElementById("nextPreview")
+  const positionCurrent = document.getElementById("positionCurrent")
+  const positionTotal = document.getElementById("positionTotal")
+  const liveRegion = document.getElementById("liveRegion")
+  const stage = document.getElementById("stage")
+  const visibleCards = new Map()
+  let current = 0
+  let wheelLocked = false
+  let pointerStart = null
+  let query = ""
+  let order = items.map((item, index) => index)
+  const escapeHtml = value => String(value).replace(/[&<>"']/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"})[character])
+  const pad = value => String(value).padStart(2, "0")
+  const niceDate = date => date ? new Date(date + "T12:00:00").toLocaleDateString("en-US", {month: "short", day: "numeric", year: "numeric"}) : ""
+  const matches = item => {
+   const q = query.trim().toLowerCase()
+   if (!q) return true
+   return [item.title, item.date, niceDate(item.date), item.caption].filter(Boolean).join(" ").toLowerCase().includes(q)
+  }
+  const spotOf = index => order.indexOf(index)
+  const sideIndex = delta => {
+   const spot = spotOf(current)
+   const nextSpot = spot + delta
+   if (spot === -1 || nextSpot < 0 || nextSpot >= order.length) return undefined
+   return order[nextSpot]
+  }
+  const cardPosition = distance => {
+   const direction = Math.sign(distance)
+   const depth = Math.abs(distance)
+   const settings = [
+    ["0px", "0px", "0deg", 1, 1],
+    [`calc(${direction} * clamp(225px, 25vw, 400px))`, "-135px", `${direction * -38}deg`, .82, .9],
+    [`calc(${direction} * clamp(320px, 34vw, 545px))`, "-285px", `${direction * -52}deg`, .64, .6],
+    [`calc(${direction} * clamp(385px, 41vw, 660px))`, "-430px", `${direction * -60}deg`, .5, .28]
+   ]
+   return settings[Math.min(depth, 3)]
+  }
+  const createCard = index => {
+   const item = items[index]
+   const shown = escapeHtml(item.web || item.image)
+   const full = escapeHtml(item.image)
+   const card = document.createElement("article")
+   card.className = "card"
+   card.dataset.index = index
+   card.innerHTML = `
+    <div class="browserBar"><a class="makerName" href="${full}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a><div class="barLanguages"><span class="language">${escapeHtml(niceDate(item.date))}</span></div></div>
+    <div class="viewport">
+     <div class="cardBlur" style="background-image:url('${shown}')"></div>
+     <a class="cardImgLink" href="${full}" target="_blank" rel="noopener noreferrer" title="Open full size in a new tab"><img class="cardImg" src="${shown}" alt="${escapeHtml(item.caption || item.title)}" loading="eager"></a>
+     ${item.caption ? `<p class="caption">${escapeHtml(item.caption)}</p>` : ""}
+     <div class="cardTint"></div>
+    </div>`
+   carousel.appendChild(card)
+   visibleCards.set(index, card)
+   return card
+  }
+  const announce = item => { liveRegion.textContent = `${item.title}, ${niceDate(item.date)}. ${item.caption}` }
+  const updateChrome = () => {
+   const spot = spotOf(current)
+   previous.disabled = spot <= 0
+   next.disabled = spot === -1 || spot >= order.length - 1
+   previousPreview.disabled = previous.disabled
+   nextPreview.disabled = next.disabled
+   previousPreview.setAttribute("aria-label", spot > 0 ? `Center ${items[order[spot - 1]].title}` : "No previous photo")
+   nextPreview.setAttribute("aria-label", spot >= 0 && spot < order.length - 1 ? `Center ${items[order[spot + 1]].title}` : "No next photo")
+   positionCurrent.textContent = spot >= 0 ? pad(spot + 1) : "00"
+   positionTotal.textContent = pad(order.length)
+  }
+  const renderCards = () => {
+   const center = spotOf(current)
+   const wanted = new Map()
+   for (let spot = Math.max(0, center - 3); spot <= Math.min(order.length - 1, center + 3); spot++) wanted.set(order[spot], spot - center)
+   visibleCards.forEach((card, index) => {
+    if (!wanted.has(index)) {
+     card.remove()
+     visibleCards.delete(index)
+    }
+   })
+   wanted.forEach((distance, index) => {
+    const card = visibleCards.get(index) || createCard(index)
+    const [x, z, rotation, scale, opacity] = cardPosition(distance)
+    card.style.setProperty("--x", x)
+    card.style.setProperty("--z", z)
+    card.style.setProperty("--rot", rotation)
+    card.style.setProperty("--scale", scale)
+    card.style.opacity = opacity
+    card.style.zIndex = String(10 - Math.abs(distance))
+    card.classList.remove("sideHovered")
+    card.classList.toggle("active", distance === 0)
+   })
+  }
+  const setPreviewHover = (index, hovered) => visibleCards.get(index)?.classList.toggle("sideHovered", hovered)
+  const updateList = shouldScroll => {
+   list.querySelectorAll("a[data-index]").forEach(link => link.setAttribute("aria-current", Number(link.dataset.index) === current ? "true" : "false"))
+   if (!shouldScroll) return
+   const link = list.querySelector(`a[data-index="${current}"]`)
+   if (!link) return
+   const mobile = matchMedia("(max-width: 680px)").matches
+   list.scrollTo(mobile
+    ? {left: link.offsetLeft - list.clientWidth / 2 + link.offsetWidth / 2, behavior: "smooth"}
+    : {top: link.offsetTop - list.clientHeight / 2 + link.offsetHeight / 2, behavior: "smooth"})
+  }
+  const renderList = () => {
+   list.innerHTML = order.length
+    ? order.map(index => {
+      const item = items[index]
+      return `<a href="#${escapeHtml(item.slug)}" data-index="${index}" aria-current="${index === current}"><span class="tocCopy"><span class="tocName">${escapeHtml(item.title)}</span><span class="tocLanguage">${escapeHtml(niceDate(item.date))}</span></span><span class="tocRank">#${pad(index + 1)}</span></a>`
+     }).join("")
+    : `<p class="tocEmpty">No photos match \u201c${escapeHtml(query)}\u201d.</p>`
+  }
+  const select = (index, shouldScroll = true) => {
+   if (spotOf(index) === -1) return
+   if (index === current && visibleCards.size) return
+   current = index
+   renderCards()
+   updateList(shouldScroll)
+   updateChrome()
+   announce(items[current])
+   history.replaceState(null, "", `#${encodeURIComponent(items[current].slug)}`)
+  }
+  const step = delta => {
+   const next = sideIndex(delta)
+   if (next !== undefined) select(next)
+  }
+  const applyFilter = () => {
+   query = filterInput.value
+   filterClear.hidden = !query
+   order = items.map((item, index) => index).filter(index => matches(items[index]))
+   if (!order.length) {
+    visibleCards.forEach(card => card.remove())
+    visibleCards.clear()
+    renderList()
+    current = -1
+    updateChrome()
+    liveRegion.textContent = "No photos match your filter"
+    return
+   }
+   if (spotOf(current) === -1) {
+    current = order[0]
+    history.replaceState(null, "", `#${encodeURIComponent(items[current].slug)}`)
+   }
+   renderList()
+   renderCards()
+   updateList(true)
+   updateChrome()
+   announce(items[current])
+  }
+  renderList()
+  list.addEventListener("click", event => {
+   const link = event.target.closest("a[data-index]")
+   if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+   event.preventDefault()
+   select(Number(link.dataset.index))
+  })
+  filterInput.addEventListener("input", applyFilter)
+  filterClear.addEventListener("click", () => {
+   filterInput.value = ""
+   applyFilter()
+   filterInput.focus()
+  })
+  previous.addEventListener("click", () => step(-1))
+  next.addEventListener("click", () => step(1))
+  previousPreview.addEventListener("click", () => step(-1))
+  nextPreview.addEventListener("click", () => step(1))
+  previousPreview.addEventListener("pointerenter", () => setPreviewHover(sideIndex(-1), true))
+  previousPreview.addEventListener("pointerleave", () => setPreviewHover(sideIndex(-1), false))
+  nextPreview.addEventListener("pointerenter", () => setPreviewHover(sideIndex(1), true))
+  nextPreview.addEventListener("pointerleave", () => setPreviewHover(sideIndex(1), false))
+  document.addEventListener("keydown", event => {
+   if (event.target === filterInput) {
+    if (event.key === "Escape") { filterInput.value = ""; applyFilter() }
+    return
+   }
+   if (event.key === "/") { event.preventDefault(); filterInput.focus(); return }
+   if (event.key === "ArrowLeft") { event.preventDefault(); step(-1) }
+   if (event.key === "ArrowRight") { event.preventDefault(); step(1) }
+   if (event.key === "Home") { event.preventDefault(); if (order.length) select(order[0]) }
+   if (event.key === "End") { event.preventDefault(); if (order.length) select(order[order.length - 1]) }
+  })
+  stage.addEventListener("wheel", event => {
+   if (wheelLocked || Math.max(Math.abs(event.deltaX), Math.abs(event.deltaY)) < 18) return
+   wheelLocked = true
+   step(event.deltaX + event.deltaY > 0 ? 1 : -1)
+   window.setTimeout(() => { wheelLocked = false }, 280)
+  }, {passive: true})
+  stage.addEventListener("pointerdown", event => { pointerStart = event.clientX })
+  stage.addEventListener("pointerup", event => {
+   if (pointerStart === null) return
+   const distance = event.clientX - pointerStart
+   pointerStart = null
+   if (Math.abs(distance) > 55) step(distance < 0 ? 1 : -1)
+  })
+  window.addEventListener("hashchange", () => {
+   const slug = decodeURIComponent(location.hash.slice(1))
+   const index = items.findIndex(item => item.slug === slug)
+   if (index < 0) return
+   if (spotOf(index) === -1) {
+    filterInput.value = ""
+    filterClear.hidden = true
+    query = ""
+    order = items.map((item, spot) => spot)
+    renderList()
+   }
+   select(index)
+  })
+  const hashSlug = decodeURIComponent(location.hash.slice(1))
+  const hashIndex = items.findIndex(item => item.slug === hashSlug)
+  current = hashIndex >= 0 ? hashIndex : 0
+  renderCards()
+  updateList(true)
+  updateChrome()
+  announce(items[current])
+ })()
