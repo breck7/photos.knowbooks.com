@@ -1,9 +1,10 @@
 title Knowbooks Photos
-description Photos from the making of Knowbooks: prototypes, wood, leather, and inspiration, newest first.
+description Photos from the making and prototyping of Knowbooks.
 baseUrl https://photos.knowbooks.com/
 permalink index.html
-openGraphImage cherry-october-3.jpeg
+openGraphImage og.jpg
 favicon knowbooksLogo.svg
+photos.parsers
 buildHtml
 metaTags
 
@@ -21,7 +22,7 @@ html
    <header class="masthead">
     <div>
      <h1>Knowbooks<br><span>Photos</span></h1>
-     <p>Photos from the making of Knowbooks: prototypes, wood, leather, and inspiration, newest first.</p>
+     <p>Photos from the making and prototyping of Knowbooks.</p>
      <p class="credit">Made by <a href="https://twitter.com/breckyunits" target="_blank" rel="noopener noreferrer">Breck Yunits</a> · Get yours at <a href="https://knowbooks.com">knowbooks.com</a></p>
     </div>
     <a class="repoLink" href="https://knowbooks.com" aria-label="Knowbooks.com" title="Knowbooks.com"><img src="knowbooksLogo.svg" alt=""></a>
@@ -387,7 +388,7 @@ css
  .card:not(.active) .caption { opacity: 0; }
  @media (max-width: 680px) { .caption { padding: 30px 12px 40px; font-size: 11px; } }
 
-photosData.js
+photosData
 
 script
  (() => {

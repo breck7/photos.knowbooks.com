@@ -1,0 +1,32 @@
+// Builds the gallery from the image files in this folder. No catalog to maintain.
+// Name each photo:  YYYY-MM-DD Title -- Optional caption.jpeg   (also .jpg .png .webp .gif .avif)
+// Newest first. If web/<same filename> exists, the page shows that smaller copy and links to the original.
+photosDataParser
+ extends abstractScrollParser
+ cueFromId
+ description Inline const photosData = [...] built from the photo filenames in this folder.
+ javascript
+  buildHtml() {
+   const json = JSON.stringify(this.isNodeJs() ? this.photos : [], undefined, 1).replace(/</g, "\\u003c")
+   return `<script>const photosData = ${json}</script>`
+  }
+  get photos() {
+   const fs = require("fs")
+   const path = require("path")
+   const {folderPath} = this.root
+   const url = name => encodeURIComponent(name).replace(/['()]/g, c => "%" + c.charCodeAt(0).toString(16).toUpperCase())
+   const slug = text => text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
+   const pattern = /^(\d{4}-\d{2}-\d{2}) (.+?)(?: -- (.+))?\.(jpe?g|png|webp|gif|avif)$/i
+   return fs.readdirSync(folderPath).sort().reverse().map(file => {
+     const match = file.normalize("NFC").match(pattern)
+     if (!match) {
+      if (/\.(jpe?g|png|webp|gif|avif)$/i.test(file) && !file.startsWith("og.")) this.root.log(`⚠️  Skipped ${file}: name it "YYYY-MM-DD Title -- Optional caption.jpeg"`)
+      return undefined
+     }
+     const [, date, title, caption] = match
+     const photo = {id: slug(date + " " + title), title: title.trim(), date, image: url(file)}
+     if (caption) photo.caption = caption.trim()
+     if (fs.existsSync(path.join(folderPath, "web", file))) photo.web = "web/" + url(file)
+     return photo
+    }).filter(Boolean)
+  }
